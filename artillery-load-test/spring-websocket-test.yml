@@ -1,0 +1,17 @@
+config:
+  # target is getting replaced in processor.js
+  target: "ws://localhost:8080/dummyUrl"
+  phases:
+    - duration: 10 # 10 seconds
+      arrivalRate: 1 # 1 user per second
+  processor: "./processor.js"
+
+scenarios:
+  - engine: "ws"
+    flow:
+      - connect:
+          function: "connectHandler"
+      - function: enableMessageLogging # to handle the message metrics
+      - function: "generateMessageData"
+      - send: "{{ message }}"
+      - think: 10 # Pause/Only listen for messages for 10 seconds.
