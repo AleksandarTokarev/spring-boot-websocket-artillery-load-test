@@ -3,7 +3,10 @@ This is a service that uses the tool https://www.artillery.io/ in order to execu
 
 ## How to create Docker Image and Run it
 1. `docker build -t artillery-ws-load-test:tag .` (build the current directory with a tag as you like)
-2. `docker run artillery-ws-load-test:1.0.0` (the tag that you have built previously)
+2. `docker run artillery-ws-load-test:1.0.0` (the tag that you have built previously)  
+NOTE: Windows will not work out of the box as there is a limitation on the host network   https://stackoverflow.com/a/63210708/3421066  
+   a) You need to enable host networking following the link:https://stackoverflow.com/a/78957561/3421066  
+b) `docker run --net=host  artillery-ws-load-test:1.0.0` run it with this command
 
 # Links
 https://www.artillery.io/docs/get-started/get-artillery  
