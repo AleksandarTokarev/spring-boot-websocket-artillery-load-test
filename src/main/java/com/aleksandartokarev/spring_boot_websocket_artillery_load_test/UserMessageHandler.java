@@ -64,6 +64,9 @@ public class UserMessageHandler implements WebSocketHandler {
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         String parsedMessage = (String) message.getPayload();
         String username = getUsernameFromToken(session.getHandshakeHeaders());
+        if (username == null) {
+            return;
+        }
         sessions.computeIfAbsent(username, v -> new CopyOnWriteArraySet<>());
         sessions.get(username).add(session);
         log.info("Message: {}", parsedMessage);
