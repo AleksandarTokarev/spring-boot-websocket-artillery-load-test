@@ -70,7 +70,7 @@ public class UserMessageHandler implements WebSocketHandler {
         sessions.computeIfAbsent(username, v -> new CopyOnWriteArraySet<>());
         sessions.get(username).add(session);
         log.info("Message: {}", parsedMessage);
-        session.sendMessage(new TextMessage("Started processing message: " + session + " - " + parsedMessage));
+        session.sendMessage(new TextMessage("Started processing message: " + parsedMessage));
     }
 
     @Override
@@ -83,6 +83,9 @@ public class UserMessageHandler implements WebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
         log.info("Connection closed on session: {} with status: {}", session.getId(), closeStatus.getCode());
         String username = getUsernameFromToken(session.getHandshakeHeaders());
+        if (username == null) {
+            return;
+        }
         sessions.get(username).remove(session);
         if (sessions.get(username).isEmpty()) {
             sessions.remove(username);
@@ -102,7 +105,7 @@ public class UserMessageHandler implements WebSocketHandler {
                                 .decode(httpHeaders.get(JWT_TOKEN_HEADER)
                                         .get(0).split("\\.")[1])), new TypeReference<>() {});
                 return jwtPayload.get("sub");
-            } catch (JsonProcessingException e) {
+            } catch (Exception e) {
                 return null;
             }
         } else {
