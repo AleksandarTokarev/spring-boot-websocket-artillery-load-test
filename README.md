@@ -6,10 +6,19 @@ https://medium.com/@zayarthant/websocket-application-with-spring-boot-and-angula
 https://www.baeldung.com/websockets-spring  
 https://medium.com/simform-engineering/websocket-spring-boot-build-a-real-time-bidirectional-applications-e8c95bc19cbf
 
-
-# Proper way to handle Websockets and sessions (works with Postman)
+### Proper way to handle Websockets and sessions (works with Postman)
 https://www.youtube.com/watch?v=Smkbp5gsOiU&ab_channel=SpringBootTUTORIAL  
 https://github.com/wdkeyser02/SpringBootWebSockets/blob/part01/SpringBootWebSockets/src/main/java/willydekeyser/handler/TutorialHandler.java  
 https://www.youtube.com/watch?v=KPfw0xkh3Lc&ab_channel=CodeWiz  
-https://github.com/CodeWizzard01/websocket-java  
-
+https://github.com/CodeWizzard01/websocket-java
+### Good Example on how to send messages on a schedule without keeping sessions
+https://github.com/nielsutrecht/spring-boot-websocket-client
+### Random Examples
+https://github.com/nickebbutt/stomp-websockets-java-client
+### Websocket client
+https://github.com/purohitdeep/springbootwebsocketclient  
+https://github.com/purohitdeep/springbootwebsocketserver
+### Websocket server how to handle handshake validation (validate tokens etc)
+https://github.com/netbuffer/spring-boot-websocket-demo
+### Good client example
+https://github.com/Svelty/simple-springboot-ws-client

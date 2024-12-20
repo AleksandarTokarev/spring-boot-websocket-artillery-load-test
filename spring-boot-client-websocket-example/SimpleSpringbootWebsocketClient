@@ -1,0 +1,58 @@
+
+import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Service;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketHttpHeaders;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.client.WebSocketClient;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
+
+import java.io.IOException;
+import java.net.URI;
+
+@Service
+public class SimpleSpringbootWebsocketClient {
+
+    private final static String JWT_TOKEN_HEADER = "x-jwt-token";
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleSpringbootWebsocketClient.class);
+
+    @PostConstruct
+    public void connect() {
+        try {
+            WebSocketClient webSocketClient = new StandardWebSocketClient();
+            HttpHeaders headers = new HttpHeaders();
+            headers.set(JWT_TOKEN_HEADER, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJCb3lrbyIsImlhdCI6MTUxNjIzOTAyMn0.Z6GAZJTyX8OfKVTtKFJ_5KPhDy9Jkkw39UZOhvCP1GQ");
+            WebSocketSession webSocketSession = webSocketClient.doHandshake(new TextWebSocketHandler() {
+                @Override
+                public void handleTextMessage(WebSocketSession session, TextMessage message) {
+                    LOGGER.info("received message - " + message.getPayload() + " " + Thread.currentThread().getName());
+                }
+
+                @Override
+                public void afterConnectionEstablished(WebSocketSession session) throws IOException {
+                    LOGGER.info("established connection - " + session);
+                    session.sendMessage(new TextMessage("random"));
+//                    session.close();
+                }
+
+                @Override
+                public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
+                    LOGGER.error("handleTransportError");
+                }
+
+                @Override
+                public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+                    LOGGER.error("afterConnectionClosed");
+                }
+
+            }, new WebSocketHttpHeaders(headers), URI.create("ws://localhost:8080/userMessages")).get();
+        } catch (Exception e) {
+            LOGGER.error("Exception while accessing websocket", e);
+        }
+    }
+}
